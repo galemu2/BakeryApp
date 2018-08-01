@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baking Time</string>
+
+
+    <string name="hint_recipe_name">Cheese Cake</string>
+    <string name="hint_serving_size">Serving Size: 2</string>
+</resources>

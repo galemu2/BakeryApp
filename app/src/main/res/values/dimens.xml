@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_layout_margin">4dp</dimen>
+    <!--padding to surrond text and image or card-->
+    <dimen name="card_detail_padding">8dp</dimen>
+    <dimen name="blank_view_padding">16dp</dimen>
+</resources>
