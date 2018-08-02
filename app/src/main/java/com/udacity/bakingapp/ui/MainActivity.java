@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         if(Util.getNetworkStatus(this)) {
-            getSupportLoaderManager().initLoader(0, null, this).forceLoad(); ;
+            getSupportLoaderManager().initLoader(0, null, this).forceLoad() ;
         }else {
 
             mBlankImageView.setVisibility(View.VISIBLE);

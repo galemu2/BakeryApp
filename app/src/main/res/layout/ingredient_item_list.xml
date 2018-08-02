@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#b0bec5"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:hint="@string/hint_ingredient_name"
+        android:paddingStart="@dimen/ingredient_list_padding_start_left"
+        android:paddingLeft="@dimen/ingredient_list_padding_start_left"
+        android:paddingBottom="@dimen/ingredient_list_padding_bottom"
+        android:textColor="@android:color/black"/>
+
+
+</LinearLayout>

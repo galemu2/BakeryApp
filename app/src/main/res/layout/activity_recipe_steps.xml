@@ -7,8 +7,29 @@
     android:orientation="vertical"
     tools:context=".ui.RecipeStepActivity">
 
-    <include layout="@layout/toolbar_main"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/toolbar_main"/>
 
-    <include layout="@layout/ingredients_layout"/>
+    <!--    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">-->
+
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/ingredients_layout"/>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/steps_layout"/>
+
+
+<!--
+    </ScrollView>
+-->
 
 </LinearLayout>

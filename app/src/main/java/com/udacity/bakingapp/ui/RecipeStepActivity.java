@@ -5,12 +5,16 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.udacity.bakingapp.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +32,9 @@ public class RecipeStepActivity extends AppCompatActivity {
     private static final String RECIPE_NAME = "name";
     private String recipe_name = null;
 
+    private RecyclerView ingredientRecyclerView;
+    private IngredientsListAdaptor ingredientsListAdaptor;
+    private RecyclerView.LayoutManager mLayouManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,24 @@ public class RecipeStepActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (recipe_name != null) actionBar.setTitle(recipe_name);
         }
+
+        ingredientRecyclerView = findViewById(R.id.recyclerView_ingredients);
+        mLayouManager = new GridLayoutManager(this, 2);
+        JSONArray ingredientsJSONArray = null;
+
+        try {
+            ingredientsJSONArray = jsonObject.getJSONArray(INGREDIENTS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } ;
+
+        if (ingredientsJSONArray != null) {
+            ingredientsListAdaptor = new IngredientsListAdaptor(this, ingredientsJSONArray);
+            ingredientRecyclerView.setLayoutManager(mLayouManager);
+            ingredientRecyclerView.setAdapter(ingredientsListAdaptor);
+
+        }
+
     }
 
     @Override

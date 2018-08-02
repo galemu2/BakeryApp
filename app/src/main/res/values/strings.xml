@@ -5,4 +5,7 @@
     <string name="hint_recipe_name">Cheese Cake</string>
     <string name="hint_serving_size">Serving Size: 2</string>
     <string name="ingredients_title">Ingredients</string>
+    <string name="hint_ingredient_name">1 TBSP salt</string>
+    <string name="steps_title">Steps</string>
+    <string name="bullet">►</string>
 </resources>

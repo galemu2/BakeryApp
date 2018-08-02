@@ -4,4 +4,7 @@
     <!--padding to surrond text and image or card-->
     <dimen name="card_detail_padding">8dp</dimen>
     <dimen name="blank_view_padding">16dp</dimen>
+    <dimen name="ingredient_list_padding_start_left">8dp</dimen>
+    <dimen name="ingredients_title_padding">8dp</dimen>
+    <dimen name="ingredient_list_padding_bottom">4dp</dimen>
 </resources>
