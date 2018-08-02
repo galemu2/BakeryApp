@@ -3,21 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView_recipe_list"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:layout_margin="@dimen/card_layout_margin">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="@dimen/card_detail_padding">
 
-        <!--TODO add content description-->
-        <ImageView
-            android:id="@+id/imageView_recipe_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="TODO" />
 
         <TextView
             android:id="@+id/textView_recipe_name"
@@ -25,13 +18,16 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_recipe_name"
             android:textAlignment="center"
+            android:layout_centerInParent="true"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
         <TextView
             android:id="@+id/textView_serving_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_recipe_name"
             android:hint="@string/hint_serving_size"
-            android:textAlignment="center" />
-    </LinearLayout>
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle.Inverse"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

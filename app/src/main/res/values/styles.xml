@@ -24,5 +24,10 @@
         <item name="android:paddingBottom">@dimen/ingredients_title_padding</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Display2</item>
+
+        <item name="android:background">@color/title_background</item>
+        <item name="android:padding">@dimen/title_padding_margin</item>
+        <item name="android:layout_margin">@dimen/title_padding_margin</item>
+
     </style>
 </resources>

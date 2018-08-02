@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 
 import com.udacity.bakingapp.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
+import com.udacity.bakingapp.StepsListAdaptor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +36,12 @@ public class RecipeStepActivity extends AppCompatActivity {
 
     private RecyclerView ingredientRecyclerView;
     private IngredientsListAdaptor ingredientsListAdaptor;
-    private RecyclerView.LayoutManager mLayouManager;
+    private RecyclerView.LayoutManager ingredientsLayoutManager;
+
+    private RecyclerView stepsRecyclerView;
+    private StepsListAdaptor stepsListAdaptor;
+    private RecyclerView.LayoutManager stepsLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,7 @@ public class RecipeStepActivity extends AppCompatActivity {
         }
 
         ingredientRecyclerView = findViewById(R.id.recyclerView_ingredients);
-        mLayouManager = new GridLayoutManager(this, 2);
+        ingredientsLayoutManager = new GridLayoutManager(this, 2);
         JSONArray ingredientsJSONArray = null;
 
         try {
@@ -76,11 +83,27 @@ public class RecipeStepActivity extends AppCompatActivity {
 
         if (ingredientsJSONArray != null) {
             ingredientsListAdaptor = new IngredientsListAdaptor(this, ingredientsJSONArray);
-            ingredientRecyclerView.setLayoutManager(mLayouManager);
+            ingredientRecyclerView.setLayoutManager(ingredientsLayoutManager);
             ingredientRecyclerView.setAdapter(ingredientsListAdaptor);
 
         }
 
+        stepsRecyclerView = findViewById(R.id.recyclerView_steps);
+        stepsLayoutManager = new LinearLayoutManager(this);
+        JSONArray stepsJSONArray = null;
+
+        try {
+            stepsJSONArray = jsonObject.getJSONArray(STEPS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (ingredientsJSONArray != null) {
+            stepsListAdaptor = new StepsListAdaptor(this, stepsJSONArray);
+            stepsRecyclerView.setLayoutManager(stepsLayoutManager);
+            stepsRecyclerView.setAdapter(stepsListAdaptor);
+
+        }
     }
 
     @Override

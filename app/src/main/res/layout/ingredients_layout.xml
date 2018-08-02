@@ -9,12 +9,17 @@
     <TextView
         android:id="@+id/textView_ingredients_title"
         style="@style/ingredientRecipeTitle"
-        android:text="@string/ingredients_title" />
+        android:text="@string/ingredients_title"
+ />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_ingredients"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ingredient_recyclerVIew_margin"
+        android:layout_marginLeft="@dimen/ingredient_recyclerVIew_margin"
+        android:layout_marginEnd="@dimen/ingredient_recyclerVIew_margin"
+        android:layout_marginRight="@dimen/ingredient_recyclerVIew_margin">
 
     </android.support.v7.widget.RecyclerView>
 

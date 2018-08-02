@@ -8,4 +8,6 @@
     <string name="hint_ingredient_name">1 TBSP salt</string>
     <string name="steps_title">Steps</string>
     <string name="bullet">►</string>
+    <string name="hint_steps_short">step one</string>
+    <string name="hint_steps_long">this is the long version of the stps.  it may contain multiple lines</string>
 </resources>

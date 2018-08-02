@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 public class RecipeListAdaptor extends RecyclerView.Adapter<RecipeListAdaptor.ViewHolder> {
 
+    public static final String SERVING_SIZE1 = "Serving size: ";
     private Context mContext;
     private static JSONArray bakingArray;
     private static final String RECIPE_NAME = "name";
@@ -63,7 +64,7 @@ public class RecipeListAdaptor extends RecyclerView.Adapter<RecipeListAdaptor.Vi
             }
 
             if(servings !=null){
-                servings = "Serving size: "+servings;
+                servings = SERVING_SIZE1 +servings;
                 viewHolder.textViewServingSize.setText(servings);
             }
         }
@@ -95,14 +96,14 @@ public class RecipeListAdaptor extends RecyclerView.Adapter<RecipeListAdaptor.Vi
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageView;
+
         private TextView textViewName, textViewServingSize;
         private View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
-            mImageView = itemView.findViewById(R.id.imageView_recipe_list);
+
             textViewName = itemView.findViewById(R.id.textView_recipe_name);
             textViewServingSize = itemView.findViewById(R.id.textView_serving_size);
         }

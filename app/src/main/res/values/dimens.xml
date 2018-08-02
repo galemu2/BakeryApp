@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="card_layout_margin">4dp</dimen>
-    <!--padding to surrond text and image or card-->
+    <!--padding to surround text and image or card-->
     <dimen name="card_detail_padding">8dp</dimen>
     <dimen name="blank_view_padding">16dp</dimen>
     <dimen name="ingredient_list_padding_start_left">8dp</dimen>
     <dimen name="ingredients_title_padding">8dp</dimen>
     <dimen name="ingredient_list_padding_bottom">4dp</dimen>
+    <dimen name="ingredient_recyclerVIew_margin">8dp</dimen>
+    <dimen name="title_padding_margin">8dp</dimen>
+    <dimen name="ingredient_list_bullet_padding">6dp</dimen>
+    <dimen name="cardView_step_margin">2dp</dimen>
+    <dimen name="carView_steps_corner_rad">4dp</dimen>
 </resources>

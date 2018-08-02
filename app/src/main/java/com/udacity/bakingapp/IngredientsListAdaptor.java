@@ -3,9 +3,11 @@ package com.udacity.bakingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -14,11 +16,12 @@ import org.json.JSONObject;
 
 public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsListAdaptor.ViewHolder> {
 
-    public static final String BULLET = "►  ";
+    public static final String BULLET = "";//"►  ";
+    private static final String TAG = IngredientsListAdaptor.class.getSimpleName();
     private Context mContext;
     private JSONArray jsonArray;
     private static final String QUANTITY = "quantity";
-    private static final String MEASUREING= "measure";
+    private static final String MEASUREING = "measure";
     private static final String INGREDIENTS = "ingredient";
 
 
@@ -45,36 +48,56 @@ public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsList
         JSONObject jsonObject;
         String ingredient = null;
 
-
+        holder.imageView.setVisibility(View.VISIBLE);
+        int len = jsonArray.length();
+        if (position == len) {
+            holder.textView_ingredient.setVisibility(View.INVISIBLE);
+            holder.imageView.setVisibility(View.INVISIBLE);
+            return;
+        }
         try {
             jsonObject = jsonArray.getJSONObject(position);
             ingredient = jsonObject.getString(QUANTITY);
-            ingredient = ingredient +" "+ jsonObject.getString(MEASUREING);
-            ingredient = BULLET +ingredient +" , "+ jsonObject.getString(INGREDIENTS); //"• "
+            ingredient = ingredient + " " + jsonObject.getString(MEASUREING);
+            ingredient = BULLET + ingredient + " , " + jsonObject.getString(INGREDIENTS); //"• "
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(ingredient!=null){
+
+
+        if (ingredient != null) {
             holder.textView_ingredient.setText(ingredient);
         }
+
+
     }
 
     @Override
     public int getItemCount() {
-        if (jsonArray != null)
-            return jsonArray.length();
+        if (jsonArray != null) {
+            int len = jsonArray.length();
+            if (len % 2 != 0) {
+
+                len = len + 1;
+
+            }
+            return len;
+
+        }
         return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textView_ingredient;
         private View view;
+        private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
             textView_ingredient = itemView.findViewById(R.id.textView_ingredient);
+            imageView = itemView.findViewById(R.id.imageView_ingredient_list_bullet);
         }
     }
 }
