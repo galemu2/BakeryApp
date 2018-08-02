@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.udacity.bakingapp.R;
@@ -16,26 +17,36 @@ import org.json.JSONObject;
 public class RecipeStepActivity extends AppCompatActivity {
 
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
+    private static final String TAG = RecipeStepActivity.class.getSimpleName();
     private Toolbar mToolbar;
 
     private String jsonObjString;
     private JSONObject jsonObject;
 
+    private static final String INGREDIENTS = "ingredients";
+    private static final String STEPS = "steps";
+    private static final String RECIPE_NAME = "name";
+    private String recipe_name = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_setp);
+        setContentView(R.layout.activity_recipe_steps);
 
         Intent intent = getIntent();
-        if(intent!=null){
+        if (intent != null) {
             jsonObjString = intent.getStringExtra(JSON_OBJ_BAKERY);
             try {
                 jsonObject = new JSONObject(jsonObjString);
+                recipe_name = jsonObject.getString(RECIPE_NAME);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        int size = jsonObject.length();
+        Log.d(TAG, "size: " + size);
 
         mToolbar = findViewById(R.id.toolBar);
         setSupportActionBar(mToolbar);
@@ -43,10 +54,8 @@ public class RecipeStepActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-
+            if (recipe_name != null) actionBar.setTitle(recipe_name);
         }
-
-
     }
 
     @Override
