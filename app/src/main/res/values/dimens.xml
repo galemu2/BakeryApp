@@ -12,4 +12,6 @@
     <dimen name="ingredient_list_bullet_padding">6dp</dimen>
     <dimen name="cardView_step_margin">2dp</dimen>
     <dimen name="carView_steps_corner_rad">4dp</dimen>
+    <dimen name="main_recipe_card_height">100dp</dimen>
+    <dimen name="steps_text_right_padding">8dp</dimen>
 </resources>

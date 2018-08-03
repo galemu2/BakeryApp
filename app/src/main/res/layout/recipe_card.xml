@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView_recipe_list"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="@dimen/main_recipe_card_height"
     android:layout_margin="@dimen/card_layout_margin">
 
     <RelativeLayout

@@ -118,17 +118,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onItemSelected(View view, JSONObject jsonObject) {
-        Intent intent = new Intent(MainActivity.this, RecipeStepActivity.class);
 
+        Intent intent1 = new Intent(MainActivity.this, RecipeStepsActivity.class);
         if(jsonObject!=null) {
 
             /** Source: https://stackoverflow.com/a/12214032/7504259
              *  date:   Aug 31 2012
                 name:   marmor*/
-            intent.putExtra(RecipeStepActivity.JSON_OBJ_BAKERY, jsonObject.toString());
+            intent1.putExtra(BlankFragment.JSON_OBJ_BAKERY, jsonObject.toString());
         }
 
 
-        startActivity(intent);
+        //startActivity(intent);
+
+
+        startActivity(intent1);
     }
 }

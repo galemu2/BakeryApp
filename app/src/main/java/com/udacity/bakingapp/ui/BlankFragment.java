@@ -1,16 +1,20 @@
 package com.udacity.bakingapp.ui;
 
+
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.udacity.bakingapp.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
@@ -20,11 +24,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RecipeStepActivity extends AppCompatActivity {
 
-    public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
-    private static final String TAG = RecipeStepActivity.class.getSimpleName();
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class BlankFragment extends Fragment {
+
+
     private Toolbar mToolbar;
+    public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
+
+
 
     private String jsonObjString;
     private JSONObject jsonObject;
@@ -43,12 +53,20 @@ public class RecipeStepActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager stepsLayoutManager;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_steps);
+    public BlankFragment() {
+        // Required empty public constructor
+    }
 
-        Intent intent = getIntent();
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView =  inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+
+        mToolbar =  rootView.findViewById(R.id.toolBar);
+
+        Intent intent = getAppCompatActivity(rootView).getIntent();
         if (intent != null) {
             jsonObjString = intent.getStringExtra(JSON_OBJ_BAKERY);
             try {
@@ -59,20 +77,20 @@ public class RecipeStepActivity extends AppCompatActivity {
             }
         }
 
-        int size = jsonObject.length();
-        Log.d(TAG, "size: " + size);
 
-        mToolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(mToolbar);
-
-        ActionBar actionBar = getSupportActionBar();
+        /**
+         * source: https://stackoverflow.com/a/38189630/7504259
+         *  date:   Jul 4, 2016
+         *  name:   Mustansir */
+        getAppCompatActivity(rootView).setSupportActionBar(mToolbar);
+        ActionBar actionBar = getAppCompatActivity(rootView).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (recipe_name != null) actionBar.setTitle(recipe_name);
         }
 
-        ingredientRecyclerView = findViewById(R.id.recyclerView_ingredients);
-        ingredientsLayoutManager = new GridLayoutManager(this, 2);
+        ingredientRecyclerView = rootView.findViewById(R.id.recyclerView_ingredients);
+        ingredientsLayoutManager = new GridLayoutManager(getContext(), 2);
         JSONArray ingredientsJSONArray = null;
 
         try {
@@ -82,14 +100,14 @@ public class RecipeStepActivity extends AppCompatActivity {
         } ;
 
         if (ingredientsJSONArray != null) {
-            ingredientsListAdaptor = new IngredientsListAdaptor(this, ingredientsJSONArray);
+            ingredientsListAdaptor = new IngredientsListAdaptor(getContext(), ingredientsJSONArray);
             ingredientRecyclerView.setLayoutManager(ingredientsLayoutManager);
             ingredientRecyclerView.setAdapter(ingredientsListAdaptor);
 
         }
 
-        stepsRecyclerView = findViewById(R.id.recyclerView_steps);
-        stepsLayoutManager = new LinearLayoutManager(this);
+        stepsRecyclerView = rootView.findViewById(R.id.recyclerView_steps);
+        stepsLayoutManager = new LinearLayoutManager(getContext());
         JSONArray stepsJSONArray = null;
 
         try {
@@ -99,20 +117,28 @@ public class RecipeStepActivity extends AppCompatActivity {
         }
 
         if (ingredientsJSONArray != null) {
-            stepsListAdaptor = new StepsListAdaptor(this, stepsJSONArray);
+            stepsListAdaptor = new StepsListAdaptor(getContext(), stepsJSONArray);
             stepsRecyclerView.setLayoutManager(stepsLayoutManager);
             stepsRecyclerView.setAdapter(stepsListAdaptor);
 
         }
+
+        return rootView;
+    }
+
+    private static AppCompatActivity getAppCompatActivity(View view){
+        return  ((AppCompatActivity)view.getContext());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
+            int id = item.getItemId();
+
+            if (id == android.R.id.home) {
+                NavUtils.navigateUpFromSameTask(getActivity());
+            }
+
 
         return super.onOptionsItemSelected(item);
     }

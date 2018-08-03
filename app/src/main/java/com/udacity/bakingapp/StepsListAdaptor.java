@@ -50,18 +50,15 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             "thumbnailURL":""
             */
     @Override
-    public void onBindViewHolder(@NonNull StepsListAdaptor.ViewHolder holder, final int position) {
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "click: "+position, Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void onBindViewHolder(@NonNull final StepsListAdaptor.ViewHolder holder, final int position) {
+
         JSONObject jsonObject = null;
         String steps = null;
+        String steps_long = null;
         try {
             jsonObject = mJSONArray.getJSONObject(position);
             steps = jsonObject.getString(STEPS_ID)+ ADD_SPACING;
+            steps_long = jsonObject.getString(DESCRIPTION);
             if(steps.equals(PREP_STEP)){
                 steps = "";
             }
@@ -70,8 +67,16 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             e.printStackTrace();
         }
 
+        if(steps!=null)  holder.textView_steps.setText(steps);
 
-        holder.textView_steps.setText(steps);
+        if(position!=0 && steps_long!=null){
+            holder.textView_steps_long.setVisibility(View.VISIBLE);
+            holder.textView_steps_long.setText(steps_long);
+        } else {
+
+            holder.textView_steps_long.setVisibility(View.INVISIBLE);
+        }
+
         holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,16 +96,17 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
-        private TextView textView_steps;
+        private TextView textView_steps, textView_steps_long;
         private ImageButton imageButton_steps_clip;
 
-        private TextView textView_details;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
             textView_steps = itemView.findViewById(R.id.textView_steps_short);
             imageButton_steps_clip = itemView.findViewById(R.id.imageButton_steps_clip);
+            textView_steps_long = itemView.findViewById(R.id.textView_steps_long);
         }
     }
 }
