@@ -1,6 +1,7 @@
 package com.udacity.bakingapp.ui;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.udacity.bakingapp.IngredientsListAdaptor;
+import com.udacity.bakingapp.Main2Activity;
+import com.udacity.bakingapp.dataRecipeActivity.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.StepsListAdaptor;
+import com.udacity.bakingapp.dataRecipeActivity.ShowSelectedStepVid;
+import com.udacity.bakingapp.dataRecipeActivity.StepsListAdaptor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +32,7 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BlankFragment extends Fragment {
+public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
 
 
     private Toolbar mToolbar;
@@ -53,7 +57,7 @@ public class BlankFragment extends Fragment {
     private RecyclerView.LayoutManager stepsLayoutManager;
 
 
-    public BlankFragment() {
+    public RecipeFragment() {
         // Required empty public constructor
     }
 
@@ -117,7 +121,7 @@ public class BlankFragment extends Fragment {
         }
 
         if (ingredientsJSONArray != null) {
-            stepsListAdaptor = new StepsListAdaptor(getContext(), stepsJSONArray);
+            stepsListAdaptor = new StepsListAdaptor(getContext(), stepsJSONArray, this);
             stepsRecyclerView.setLayoutManager(stepsLayoutManager);
             stepsRecyclerView.setAdapter(stepsListAdaptor);
 
@@ -141,5 +145,13 @@ public class BlankFragment extends Fragment {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(View view, JSONObject jsonObject) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, Main2Activity.class);
+        startActivity(intent);
+        //Toast.makeText(context, "in Activity", Toast.LENGTH_SHORT).show();
     }
 }

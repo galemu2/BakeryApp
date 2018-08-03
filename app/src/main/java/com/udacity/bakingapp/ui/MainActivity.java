@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             /** Source: https://stackoverflow.com/a/12214032/7504259
              *  date:   Aug 31 2012
                 name:   marmor*/
-            intent1.putExtra(BlankFragment.JSON_OBJ_BAKERY, jsonObject.toString());
+            intent1.putExtra(RecipeFragment.JSON_OBJ_BAKERY, jsonObject.toString());
         }
 
 

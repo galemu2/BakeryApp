@@ -1,4 +1,4 @@
-package com.udacity.bakingapp;
+package com.udacity.bakingapp.dataRecipeActivity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.udacity.bakingapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +22,7 @@ public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsList
     private Context mContext;
     private JSONArray jsonArray;
     private static final String QUANTITY = "quantity";
-    private static final String MEASUREING = "measure";
+    private static final String MEASURING = "measure";
     private static final String INGREDIENTS = "ingredient";
 
 
@@ -57,7 +59,7 @@ public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsList
         try {
             jsonObject = jsonArray.getJSONObject(position);
             ingredient = jsonObject.getString(QUANTITY);
-            ingredient = ingredient + " " + jsonObject.getString(MEASUREING);
+            ingredient = ingredient + " " + jsonObject.getString(MEASURING);
             ingredient = BULLET + ingredient + " , " + jsonObject.getString(INGREDIENTS); //"• "
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.udacity.bakingapp;
+package com.udacity.bakingapp.dataRecipeActivity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.udacity.bakingapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,11 +29,12 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     private static final String SHORT_DESCRIPTION = "shortDescription";
     private static final String DESCRIPTION = "description";
     private static final String VIDEO_URL = "videoURL";
+    private ShowSelectedStepVid mShowSelectedStepVid;
 
-
-    public StepsListAdaptor(Context mContext, JSONArray mJSONArray) {
+    public StepsListAdaptor(Context mContext, JSONArray mJSONArray, ShowSelectedStepVid showSelectedStepVid) {
         this.mContext = mContext;
         this.mJSONArray = mJSONArray;
+        this.mShowSelectedStepVid = showSelectedStepVid;
     }
 
     @NonNull
@@ -77,14 +80,17 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             holder.textView_steps_long.setVisibility(View.INVISIBLE);
         }
 
-        holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "pos: "+position, Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(jsonObject!=null) {
+            final JSONObject finalJsonObject = jsonObject;
+            holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mShowSelectedStepVid.onItemSelected(v, finalJsonObject);
+                    //Toast.makeText(mContext, "pos: " + position, Toast.LENGTH_SHORT).show();
+                }
+            });
 
-
+        }
     }
 
     @Override
