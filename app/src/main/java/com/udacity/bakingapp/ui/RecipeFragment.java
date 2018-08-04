@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.udacity.bakingapp.VideoDetailFragment.PASSED_JSON_OBJ;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -148,10 +150,11 @@ public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
     }
 
     @Override
-    public void onItemSelected(View view, JSONObject jsonObject) {
-        Context context = view.getContext();
+    public void onItemSelected(Context context, JSONObject jsonObject) {
+
         Intent intent = new Intent(context, Main2Activity.class);
+        intent.putExtra(PASSED_JSON_OBJ, jsonObject.toString());
         startActivity(intent);
-        //Toast.makeText(context, "in Activity", Toast.LENGTH_SHORT).show();
+
     }
 }

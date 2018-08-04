@@ -85,8 +85,8 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mShowSelectedStepVid.onItemSelected(v, finalJsonObject);
-                    //Toast.makeText(mContext, "pos: " + position, Toast.LENGTH_SHORT).show();
+                    mShowSelectedStepVid.onItemSelected(mContext, finalJsonObject);
+
                 }
             });
 
