@@ -13,14 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -32,7 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class VideoRecipeFragment extends Fragment {
+public class VideoRecipeFragment extends Fragment  {
 
     private static final String TAG = VideoRecipeFragment.class.getSimpleName();
     private static final String TEST_URL_STRING = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffda45_9-add-mixed-nutella-to-crust-creampie/9-add-mixed-nutella-to-crust-creampie.mp4";
@@ -45,7 +52,6 @@ public class VideoRecipeFragment extends Fragment {
 
     private TextView textView_video_detail;
 
-
     private static final String RECIPE_STEP_ID = "id";
     private static final String SHORT_DESCRIPTION = "shortDescription";
     private static final String DESCRIPTION = "description";
@@ -57,6 +63,7 @@ public class VideoRecipeFragment extends Fragment {
 
     private JSONObject videoJSONObj;
     Uri testUri = null;
+    MediaSource videoSource = null;
 
     public VideoRecipeFragment() {
     }
@@ -71,7 +78,6 @@ public class VideoRecipeFragment extends Fragment {
             String s = bundle.getString(PASSED_JSON_OBJ);
 
             try {
-
                 videoJSONObj = new JSONObject(s);
 
                 video_url = videoJSONObj.getString(VID_URL);
@@ -84,7 +90,9 @@ public class VideoRecipeFragment extends Fragment {
         } else {
             Log.d(TAG, "saved bundle is  null");
         }
+        textView_video_detail = null;
         textView_video_detail = rootView.findViewById(R.id.textView_video_steps);
+        textView_video_detail.clearComposingText();
         textView_video_detail.setText(long_description);
 
 
@@ -93,7 +101,7 @@ public class VideoRecipeFragment extends Fragment {
         //add background image for blank view
 
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(),
-                R.drawable.icons_cookie_monster));
+                R.drawable.baseline_cloud_off_white_48));
         testUri = getVidUri();
 
         return rootView;
@@ -103,11 +111,11 @@ public class VideoRecipeFragment extends Fragment {
 
         if (video_url.contains(MP4)) {
             Log.d(TAG, "VIDEO Url contains link");
-            return  Uri.parse(video_url);
+            return Uri.parse(video_url);
 
         } else if (thumbNail_url.contains(MP4)) {
             Log.d(TAG, "ThumbNail Url contains link");
-            return  Uri.parse(thumbNail_url);
+            return Uri.parse(thumbNail_url);
 
         } else {
             Log.d(TAG, "No URL link found");
@@ -121,7 +129,6 @@ public class VideoRecipeFragment extends Fragment {
         super.onStart();
 
         initializePlayer(testUri);
-
     }
 
     private void initializePlayer(Uri videoUri) {
@@ -144,11 +151,22 @@ public class VideoRecipeFragment extends Fragment {
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
                     Util.getUserAgent(getActivity(), "bakingapp"), null);
 
-            MediaSource videoSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
+            videoSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
 
             mSimplePlayer.prepare(videoSource);
-
             mSimplePlayer.setPlayWhenReady(true);
+
+
+        } else {
+
+            if (videoSource != null) {
+                videoSource.releaseSource();
+            }
+            if (mSimplePlayer != null) {
+                releasePlayer();
+            }
+
+            initializePlayer(testUri);
 
         }
     }
@@ -156,17 +174,17 @@ public class VideoRecipeFragment extends Fragment {
     /* release the exoPlayer*/
     public void releasePlayer() {
 
+        mSimplePlayer.stop();
+        mSimplePlayer.release();
+        mSimplePlayer = null;
 
-        if (mSimplePlayer != null) {
-            mSimplePlayer.stop();
-            mSimplePlayer.release();
-            mSimplePlayer = null;
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        releasePlayer();
+
+        if (mSimplePlayer != null) releasePlayer();
     }
+
 }

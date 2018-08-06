@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -33,8 +32,15 @@ public class VideoRecipeActivity extends AppCompatActivity {
     private JSONArray videoJSONArray;
     private JSONObject videoJSONObj;
 
-    int currentPos =-1;
+    int currentPos = -1;
     String s = null;
+    String jSTring = null;
+    JSONObject jsonObject = null;
+    JSONArray jsonArray = null;
+    //the max number of recipe steps available
+    int maxPos = -1;
+    int possiblePos = -1;
+    FragmentManager fragmentManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +49,25 @@ public class VideoRecipeActivity extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null) {
+        if (bundle != null) {
 
+            s = bundle.getString(PASSED_JSON_ARRAY);
+            currentPos = -1;
+            currentPos = bundle.getInt(PASSED_CURRENT_POSITION);
+            Log.d(TAG, "current Pos from bundle: " + currentPos);
 
-              s = bundle.getString(PASSED_JSON_ARRAY);
+            try {
+                jsonArray = new JSONArray(s);
+                maxPos = jsonArray.length() - 1;
 
-              currentPos = bundle.getInt(PASSED_CURRENT_POSITION);
+                jsonObject = jsonArray.getJSONObject(currentPos);
+                jSTring = jsonObject.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         } else {
-            Log.d(TAG, bundle+" bundle is null");
+            Log.d(TAG, bundle + " bundle is null");
         }
         mToolbar = findViewById(R.id.toolBar);
         setSupportActionBar(mToolbar);
@@ -76,35 +92,32 @@ public class VideoRecipeActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            VideoRecipeFragment detailFragment = new VideoRecipeFragment();
-            if(s!=null) {
-                try {
-                    JSONArray jsonArray = new JSONArray(s);
-                    JSONObject jsonObject = jsonArray.getJSONObject(currentPos);
-                    String jSTring = jsonObject.toString();
-                    Bundle b = new Bundle();
-                    b.putString(PASSED_JSON_OBJ, jSTring);
-                    detailFragment.setArguments(b);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            initDetailFragment();
+        }
 
-            }
 
-            try {
-                videoJSONArray = new JSONArray(s);
+    }
 
-                videoJSONObj = videoJSONArray. getJSONObject(currentPos);
+    private void initDetailFragment() {
+        VideoRecipeFragment detailFragment = new VideoRecipeFragment();
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        Bundle b = new Bundle();
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
+        if (jSTring != null) {
+            b.putString(PASSED_JSON_OBJ, jSTring);
+            detailFragment.setArguments(b);
+
+        }
+
+        if (fragmentManager == null) {
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.frameLayout_container, detailFragment)
                     .commit();
-
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout_container, detailFragment)
+                    .commit();
         }
 
 
@@ -121,14 +134,37 @@ public class VideoRecipeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     public void clickLeft(View view) {
-        Toast.makeText(this, "click Left", Toast.LENGTH_SHORT).show();
+        moveLeftOrRight(currentPos - 1, "On first step");
     }
 
-
     public void clickRight(View view) {
+        moveLeftOrRight(currentPos + 1, "On last step");
+    }
 
-        Toast.makeText(this, "click right", Toast.LENGTH_SHORT).show();
+    private void moveLeftOrRight(int i, String s) {
+        if (0 <= currentPos && currentPos <= maxPos) {
+
+            possiblePos = i;
+        } else {
+            Log.d(TAG, "current pos out of range: " + currentPos);
+        }
+
+        if (possiblePos >= 0 && possiblePos <= maxPos) {
+            try {
+                jsonObject = jsonArray.getJSONObject(possiblePos);
+                jSTring = jsonObject.toString();
+                currentPos = possiblePos;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            initDetailFragment();
+
+
+        } else {
+            Log.d(TAG, "possible Pos out of range: " + possiblePos);
+            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        }
     }
 }
