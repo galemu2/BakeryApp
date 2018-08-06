@@ -1,5 +1,6 @@
 package com.udacity.bakingapp;
 
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,11 +91,17 @@ public class VideoRecipeFragment extends Fragment  {
         } else {
             Log.d(TAG, "saved bundle is  null");
         }
-        textView_video_detail = null;
-        textView_video_detail = rootView.findViewById(R.id.textView_video_steps);
-        textView_video_detail.clearComposingText();
-        textView_video_detail.setText(long_description);
 
+        /** Source: https://stackoverflow.com/a/2799001/7504259
+         *  Date:   May 9 2010
+            Name:   hackbod*/
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if(currentOrientation== Configuration.ORIENTATION_PORTRAIT) {
+            textView_video_detail = null;
+            textView_video_detail = rootView.findViewById(R.id.textView_video_steps);
+            textView_video_detail.clearComposingText();
+            textView_video_detail.setText(long_description);
+        }
 
         simpleExoPlayerView = rootView.findViewById(R.id.playerView);
         simpleExoPlayerView.requestFocus();
