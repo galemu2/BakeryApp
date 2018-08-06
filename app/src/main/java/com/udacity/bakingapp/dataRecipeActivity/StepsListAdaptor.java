@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.bakingapp.R;
 
@@ -29,12 +28,12 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     private static final String SHORT_DESCRIPTION = "shortDescription";
     private static final String DESCRIPTION = "description";
     private static final String VIDEO_URL = "videoURL";
-    private ShowSelectedStepVid mShowSelectedStepVid;
+    private SelectedIngredientStep mSelectedIngredientStep;
 
-    public StepsListAdaptor(Context mContext, JSONArray mJSONArray, ShowSelectedStepVid showSelectedStepVid) {
+    public StepsListAdaptor(Context mContext, JSONArray mJSONArray, SelectedIngredientStep SelectedIngredientStep) {
         this.mContext = mContext;
         this.mJSONArray = mJSONArray;
-        this.mShowSelectedStepVid = showSelectedStepVid;
+        this.mSelectedIngredientStep = SelectedIngredientStep;
     }
 
     @NonNull
@@ -81,11 +80,11 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
         }
 
         if(jsonObject!=null) {
-            final JSONObject finalJsonObject = jsonObject;
+
             holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mShowSelectedStepVid.onItemSelected(mContext, finalJsonObject);
+                    mSelectedIngredientStep.onItemSelected(mContext, mJSONArray , position);
 
                 }
             });

@@ -16,31 +16,26 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.udacity.bakingapp.Main2Activity;
+import com.udacity.bakingapp.VideoRecipeActivity;
 import com.udacity.bakingapp.dataRecipeActivity.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.dataRecipeActivity.ShowSelectedStepVid;
+import com.udacity.bakingapp.dataRecipeActivity.SelectedIngredientStep;
 import com.udacity.bakingapp.dataRecipeActivity.StepsListAdaptor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.udacity.bakingapp.VideoDetailFragment.PASSED_JSON_OBJ;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
-
+public class RecipeFragment extends Fragment implements SelectedIngredientStep {
 
     private Toolbar mToolbar;
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
-
-
 
     private String jsonObjString;
     private JSONObject jsonObject;
@@ -58,6 +53,8 @@ public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
     private StepsListAdaptor stepsListAdaptor;
     private RecyclerView.LayoutManager stepsLayoutManager;
 
+    //holds the steps info
+    JSONArray stepsJSONArray = null;
 
     public RecipeFragment() {
         // Required empty public constructor
@@ -114,7 +111,7 @@ public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
 
         stepsRecyclerView = rootView.findViewById(R.id.recyclerView_steps);
         stepsLayoutManager = new LinearLayoutManager(getContext());
-        JSONArray stepsJSONArray = null;
+
 
         try {
             stepsJSONArray = jsonObject.getJSONArray(STEPS);
@@ -150,10 +147,16 @@ public class RecipeFragment extends Fragment implements ShowSelectedStepVid{
     }
 
     @Override
-    public void onItemSelected(Context context, JSONObject jsonObject) {
+    public void onItemSelected(Context context, JSONArray jsonArray, int currentPosition) {
 
-        Intent intent = new Intent(context, Main2Activity.class);
-        intent.putExtra(PASSED_JSON_OBJ, jsonObject.toString());
+        Intent intent = new Intent(context, VideoRecipeActivity.class);
+        //pass the json obj as string
+        intent.putExtra(VideoRecipeActivity.PASSED_JSON_ARRAY, stepsJSONArray.toString());
+
+        //pass the adaptor position as an int
+        intent.putExtra(VideoRecipeActivity.PASSED_CURRENT_POSITION, currentPosition);
+
+        intent.putExtra(VideoRecipeActivity.RECIPE_NAME, recipe_name);
         startActivity(intent);
 
     }

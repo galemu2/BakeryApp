@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".Main2Activity">
+    tools:context=".VideoRecipeActivity">
 
     <include
         layout="@layout/toolbar_main"
@@ -17,7 +17,7 @@
         android:id="@+id/frameLayout_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="5">
 
     </FrameLayout>
 
@@ -26,19 +26,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/button_left"
             android:layout_width="0dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_red_dark" />
+            android:background="@android:color/holo_red_dark"
+            android:onClick="clickLeft"
+            app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_right"
             android:layout_width="0dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_dark" />
+            android:background="@android:color/holo_blue_dark"
+            android:onClick="clickRight"
+            app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
 
     </LinearLayout>
 
