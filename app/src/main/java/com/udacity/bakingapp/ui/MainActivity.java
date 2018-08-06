@@ -1,5 +1,6 @@
 package com.udacity.bakingapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -60,7 +63,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mBlankImageView.setVisibility(View.GONE);
 
         mAdaptor = new RecipeListAdaptor(this, this);
-        mLayouManager = new LinearLayoutManager(this);
+
+        int displayWidthPixel = getResources().getDisplayMetrics().widthPixels;
+        float tabletWidth = getResources().getDimension(R.dimen.tablet_screen_width);
+
+        if(displayWidthPixel >= (int)tabletWidth) {
+            int numberOfColumns = calculateNoOfColumns(this);
+
+            mLayouManager = new GridLayoutManager(this, numberOfColumns);
+        } else {
+            mLayouManager = new LinearLayoutManager(this);
+        }
+
         mRecycerView.setLayoutManager(mLayouManager);
 
         mRecycerView.setAdapter(mAdaptor);
@@ -133,5 +147,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         startActivity(intent1);
+    }
+
+    /** helper method used to calculate orientation for tablet landscape views*/
+    public static int calculateNoOfColumns(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 400;
+        int noOfColumns = (int) (dpWidth / scalingFactor);
+        if(noOfColumns < 2)
+            noOfColumns = 1;
+        return noOfColumns;
     }
 }

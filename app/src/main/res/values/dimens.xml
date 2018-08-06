@@ -14,4 +14,5 @@
     <dimen name="carView_steps_corner_rad">4dp</dimen>
     <dimen name="main_recipe_card_height">100dp</dimen>
     <dimen name="steps_text_right_padding">8dp</dimen>
+    <dimen name="tablet_screen_width">600dp</dimen>
 </resources>
