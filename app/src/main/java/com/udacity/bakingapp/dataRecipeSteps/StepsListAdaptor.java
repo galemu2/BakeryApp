@@ -1,4 +1,4 @@
-package com.udacity.bakingapp.dataRecipeActivity;
+package com.udacity.bakingapp.dataRecipeSteps;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -29,6 +29,7 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     private static final String DESCRIPTION = "description";
     private static final String VIDEO_URL = "videoURL";
     private SelectedIngredientStep mSelectedIngredientStep;
+
 
     public StepsListAdaptor(Context mContext, JSONArray mJSONArray, SelectedIngredientStep SelectedIngredientStep) {
         this.mContext = mContext;
@@ -79,17 +80,13 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             holder.textView_steps_long.setVisibility(View.INVISIBLE);
         }
 
-        if(jsonObject!=null) {
+        holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSelectedIngredientStep.onItemSelected(mContext  , position);
 
-            holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSelectedIngredientStep.onItemSelected(mContext, mJSONArray , position);
-
-                }
-            });
-
-        }
+            }
+        });
     }
 
     @Override

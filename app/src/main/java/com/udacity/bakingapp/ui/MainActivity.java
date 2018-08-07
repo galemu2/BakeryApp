@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.udacity.bakingapp.utility.Util;
+import com.udacity.bakingapp.utility.UtilClass;
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.dataMainActivity.BakeryItemClicked;
 import com.udacity.bakingapp.dataMainActivity.CustomBakingLoader;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
-        if(Util.getNetworkStatus(this)) {
+        if(UtilClass.getNetworkStatus(this)) {
             getSupportLoaderManager().initLoader(0, null, this).forceLoad() ;
         }else {
 

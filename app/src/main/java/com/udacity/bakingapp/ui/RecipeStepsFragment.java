@@ -3,6 +3,7 @@ package com.udacity.bakingapp.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
@@ -17,16 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.bakingapp.VideoRecipeActivity;
-import com.udacity.bakingapp.dataRecipeActivity.IngredientsListAdaptor;
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.dataRecipeActivity.SelectedIngredientStep;
-import com.udacity.bakingapp.dataRecipeActivity.StepsListAdaptor;
+import com.udacity.bakingapp.VideoRecipeActivity;
+import com.udacity.bakingapp.dataRecipeSteps.IngredientsListAdaptor;
+import com.udacity.bakingapp.dataRecipeSteps.SelectedIngredientStep;
+import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
+import com.udacity.bakingapp.utility.UtilClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 
 /**
@@ -43,6 +44,10 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     private static final String INGREDIENTS = "ingredients";
     private static final String STEPS = "steps";
     private static final String RECIPE_NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String VID_URL = "videoURL";
+    private static final String THUMBNAIL_URL = "thumbnailURL";
+
     private String recipe_name = null;
 
     private RecyclerView ingredientRecyclerView;
@@ -55,6 +60,10 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
     //holds the steps info
     JSONArray stepsJSONArray = null;
+    private String selectedItemDescription = null;
+    private String vid_url = null;
+    private String thumbNl_url = null;
+    private Uri dscrptUrl = null;
 
     public RecipeStepsFragment() {
         // Required empty public constructor
@@ -65,9 +74,9 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_recipe_steps, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
-        mToolbar =  rootView.findViewById(R.id.toolBar);
+        mToolbar = rootView.findViewById(R.id.toolBar);
 
         Intent intent = getAppCompatActivity(rootView).getIntent();
         if (intent != null) {
@@ -100,7 +109,8 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
             ingredientsJSONArray = jsonObject.getJSONArray(INGREDIENTS);
         } catch (JSONException e) {
             e.printStackTrace();
-        } ;
+        }
+        ;
 
         if (ingredientsJSONArray != null) {
             ingredientsListAdaptor = new IngredientsListAdaptor(getContext(), ingredientsJSONArray);
@@ -129,35 +139,55 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
         return rootView;
     }
 
-    private static AppCompatActivity getAppCompatActivity(View view){
-        return  ((AppCompatActivity)view.getContext());
+    private static AppCompatActivity getAppCompatActivity(View view) {
+        return ((AppCompatActivity) view.getContext());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-            int id = item.getItemId();
+        int id = item.getItemId();
 
-            if (id == android.R.id.home) {
-                NavUtils.navigateUpFromSameTask(getActivity());
-            }
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(getActivity());
+        }
 
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onItemSelected(Context context, JSONArray jsonArray, int currentPosition) {
+    public void onItemSelected(Context context, int currentPosition) {
 
-        Intent intent = new Intent(context, VideoRecipeActivity.class);
-        //pass the json obj as string
-        intent.putExtra(VideoRecipeActivity.PASSED_JSON_ARRAY, stepsJSONArray.toString());
+        if (!RecipeStepsActivity.mTwoPain) {
 
-        //pass the adaptor position as an int
-        intent.putExtra(VideoRecipeActivity.PASSED_CURRENT_POSITION, currentPosition);
+            Intent intent = new Intent(context, VideoRecipeActivity.class);
+            //pass the json obj as string
+            intent.putExtra(VideoRecipeActivity.PASSED_JSON_ARRAY, stepsJSONArray.toString());
+            //pass the adaptor position as an int
+            intent.putExtra(VideoRecipeActivity.PASSED_CURRENT_POSITION, currentPosition);
+            intent.putExtra(VideoRecipeActivity.RECIPE_NAME, recipe_name);
+            startActivity(intent);
 
-        intent.putExtra(VideoRecipeActivity.RECIPE_NAME, recipe_name);
-        startActivity(intent);
+        } else {
+
+            try {
+                JSONObject selectedJSONObject = stepsJSONArray.getJSONObject(currentPosition);
+                selectedItemDescription = selectedJSONObject.getString(DESCRIPTION);
+                vid_url = selectedJSONObject.getString(VID_URL);
+                thumbNl_url = selectedJSONObject.getString(THUMBNAIL_URL);
+                dscrptUrl = UtilClass.getVidUri(vid_url, thumbNl_url);
+            } catch (JSONException e) {
+                selectedItemDescription = null;
+                vid_url = null;
+                thumbNl_url = null;
+                dscrptUrl = null;
+                e.printStackTrace();
+
+            }
+
+            RecipeStepsActivity.showSelectedItem(dscrptUrl, selectedItemDescription);
+        }
 
     }
 }

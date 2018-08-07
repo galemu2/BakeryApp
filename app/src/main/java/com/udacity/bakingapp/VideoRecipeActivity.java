@@ -41,6 +41,7 @@ public class VideoRecipeActivity extends AppCompatActivity {
     int maxPos = -1;
     int possiblePos = -1;
     FragmentManager fragmentManager = null;
+    private VideoRecipeFragment videoRecipeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,33 +91,35 @@ public class VideoRecipeActivity extends AppCompatActivity {
         mButtonLeft = findViewById(R.id.button_left);
         mButtonRight = findViewById(R.id.button_right);
 
+
         if (savedInstanceState == null) {
 
-            initDetailFragment();
+            initDetailFragment( );
         }
 
 
     }
 
-    private void initDetailFragment() {
-        VideoRecipeFragment detailFragment = new VideoRecipeFragment();
+    public void initDetailFragment( ) {
 
+        videoRecipeFragment = new VideoRecipeFragment();
         Bundle b = new Bundle();
 
         if (jSTring != null) {
             b.putString(PASSED_JSON_OBJ, jSTring);
-            detailFragment.setArguments(b);
 
         }
+
+        videoRecipeFragment.setArguments(b);
 
         if (fragmentManager == null) {
             fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.frameLayout_container, detailFragment)
+                    .add(R.id.frameLayout_container, videoRecipeFragment)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .replace(R.id.frameLayout_container, detailFragment)
+                    .replace(R.id.frameLayout_container, videoRecipeFragment)
                     .commit();
         }
 

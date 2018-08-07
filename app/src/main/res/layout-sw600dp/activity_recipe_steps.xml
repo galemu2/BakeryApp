@@ -5,16 +5,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/ingredients_steps_list"
-        android:name="com.udacity.bakingapp.ui.RecipeStepsFragment"
-        android:layout_width="400dp"
-        android:layout_height="match_parent"
-        tools:context=".ui.RecipeStepsFragment" />
-<!--
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"/>-->
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:id="@+id/multi_pain_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/ingredients_steps_list"
+            android:name="com.udacity.bakingapp.ui.RecipeStepsFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            tools:context=".ui.RecipeStepsFragment"
+            android:layout_weight="3"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4">
+
+        </FrameLayout>
+
+
+    </LinearLayout>
 </LinearLayout>
