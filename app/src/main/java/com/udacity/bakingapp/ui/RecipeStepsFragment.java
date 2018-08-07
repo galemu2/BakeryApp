@@ -32,7 +32,7 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecipeFragment extends Fragment implements SelectedIngredientStep {
+public class RecipeStepsFragment extends Fragment implements SelectedIngredientStep {
 
     private Toolbar mToolbar;
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
@@ -56,7 +56,7 @@ public class RecipeFragment extends Fragment implements SelectedIngredientStep {
     //holds the steps info
     JSONArray stepsJSONArray = null;
 
-    public RecipeFragment() {
+    public RecipeStepsFragment() {
         // Required empty public constructor
     }
 
