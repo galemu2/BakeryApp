@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecycerView = findViewById(R.id.recyclerView_select_recipe);
         mBlankImageView = findViewById(R.id.blank_image);
         mBlankImageView.setVisibility(View.GONE);
-
+        mRecycerView.setVisibility(View.VISIBLE);
         mAdaptor = new RecipeListAdaptor(this, this);
 
         int displayWidthPixel = getResources().getDisplayMetrics().widthPixels;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if(UtilClass.getNetworkStatus(this)) {
             getSupportLoaderManager().initLoader(0, null, this).forceLoad() ;
         }else {
-
+            mRecycerView.setVisibility(View.GONE);
             mBlankImageView.setVisibility(View.VISIBLE);
         }
 
@@ -141,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 name:   marmor*/
             intent1.putExtra(RecipeStepsFragment.JSON_OBJ_BAKERY, jsonObject.toString());
         }
-
-
-        //startActivity(intent);
-
 
         startActivity(intent1);
     }

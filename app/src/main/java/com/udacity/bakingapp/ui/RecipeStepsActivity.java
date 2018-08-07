@@ -1,7 +1,5 @@
 package com.udacity.bakingapp.ui;
 
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.VideoRecipeFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

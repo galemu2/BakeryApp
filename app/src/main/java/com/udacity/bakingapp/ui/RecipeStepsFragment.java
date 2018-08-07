@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.VideoRecipeActivity;
 import com.udacity.bakingapp.dataRecipeSteps.IngredientsListAdaptor;
 import com.udacity.bakingapp.dataRecipeSteps.SelectedIngredientStep;
 import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
@@ -29,10 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class RecipeStepsFragment extends Fragment implements SelectedIngredientStep {
 
     private Toolbar mToolbar;

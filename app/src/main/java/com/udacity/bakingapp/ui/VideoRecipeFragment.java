@@ -1,4 +1,4 @@
-package com.udacity.bakingapp;
+package com.udacity.bakingapp.ui;
 
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
@@ -28,7 +28,8 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.udacity.bakingapp.ui.RecipeStepsActivity;
+import com.udacity.bakingapp.R;
+import com.udacity.bakingapp.utility.UtilClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ import static com.udacity.bakingapp.utility.UtilClass.getVidUri;
 public class VideoRecipeFragment extends Fragment  {
 
     private static final String TAG = VideoRecipeFragment.class.getSimpleName();
+
     private static final String TEST_URL_STRING = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffda45_9-add-mixed-nutella-to-crust-creampie/9-add-mixed-nutella-to-crust-creampie.mp4";
 
     public static final String PASSED_JSON_OBJ = "json_obj_for current_position";
@@ -46,14 +48,13 @@ public class VideoRecipeFragment extends Fragment  {
 
     public static final String PASSED_DESCRIPTION_MULTI_PAIN_VIEW = "long description in multi pain view";
     public static final String PASSED_VIDEO_URL_MULTI_PAIN_VIEW = "string value for url in multi pain view";
+    public static final String CHECK_NETWORK_STATUS = "Check network status";
 
     private SimpleExoPlayerView simpleExoPlayerView;
     public SimpleExoPlayer mSimplePlayer;
 
     private TextView textView_video_detail;
 
-    private static final String RECIPE_STEP_ID = "id";
-    private static final String SHORT_DESCRIPTION = "shortDescription";
     private static final String DESCRIPTION = "description";
     private static final String VID_URL = "videoURL";
     private static final String THUMBNAIL_URL = "thumbnailURL";
@@ -144,7 +145,8 @@ public class VideoRecipeFragment extends Fragment  {
     public void onStart() {
         super.onStart();
 
-        initializePlayer(testUri);
+        if(UtilClass.getNetworkStatus(getContext()) ) initializePlayer(testUri);
+        else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
     }
 
     private void initializePlayer(Uri videoUri) {
@@ -182,8 +184,8 @@ public class VideoRecipeFragment extends Fragment  {
                 releasePlayer();
             }
 
-            initializePlayer(testUri);
-
+            if(UtilClass.getNetworkStatus(getContext())) initializePlayer(testUri);
+            else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
         }
 
         if(videoUri==null){

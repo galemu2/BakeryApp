@@ -30,7 +30,7 @@
                 android:value=".ui.MainActivity" />
         </activity>
         <activity
-            android:name=".VideoRecipeActivity"
+            android:name=".ui.VideoRecipeActivity"
             android:parentActivityName=".ui.RecipeStepsActivity"
             android:launchMode="singleTop">
             <meta-data

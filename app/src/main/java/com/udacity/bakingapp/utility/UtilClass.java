@@ -9,7 +9,7 @@ import android.util.Log;
 public class UtilClass {
 
 
-    public static final String MP4 = ".mp4";
+    private static final String MP4 = ".mp4";
     private static final String TAG = UtilClass.class.getSimpleName();
 
     /**

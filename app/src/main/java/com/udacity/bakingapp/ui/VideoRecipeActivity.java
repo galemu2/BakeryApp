@@ -1,4 +1,4 @@
-package com.udacity.bakingapp;
+package com.udacity.bakingapp.ui;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
@@ -12,11 +12,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.udacity.bakingapp.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.udacity.bakingapp.VideoRecipeFragment.PASSED_JSON_OBJ;
+import static com.udacity.bakingapp.ui.VideoRecipeFragment.PASSED_JSON_OBJ;
 
 
 public class VideoRecipeActivity extends AppCompatActivity {

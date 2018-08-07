@@ -27,7 +27,7 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     private static final String STEPS_ID = "id";
     private static final String SHORT_DESCRIPTION = "shortDescription";
     private static final String DESCRIPTION = "description";
-    private static final String VIDEO_URL = "videoURL";
+
     private SelectedIngredientStep mSelectedIngredientStep;
 
 
