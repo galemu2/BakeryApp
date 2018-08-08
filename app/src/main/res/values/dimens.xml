@@ -15,4 +15,10 @@
     <dimen name="main_recipe_card_height">100dp</dimen>
     <dimen name="steps_text_right_padding">8dp</dimen>
     <dimen name="tablet_screen_width">600dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
