@@ -4,11 +4,18 @@ package com.udacity.bakingapp.ui;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.udacity.bakingapp.R;
@@ -29,6 +37,10 @@ import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
 import com.udacity.bakingapp.database.BakeryContract;
 import com.udacity.bakingapp.database.BakeryProvider;
 import com.udacity.bakingapp.utility.UtilClass;
+import com.udacity.bakingapp.widget.BakeryWidgetProvider;
+import com.udacity.bakingapp.widget.BakeryWidgetService;
+
+import net.simonvt.schematic.annotation.TableEndpoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +49,7 @@ import org.json.JSONObject;
 public class RecipeStepsFragment extends Fragment implements SelectedIngredientStep {
 
     private static final String TAG = RecipeStepsFragment.class.getSimpleName();
+    private static final String FAVORITE_INGREDIENT_NAME = "the name of the ingredient saved";
     private Toolbar mToolbar;
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
 
@@ -66,9 +79,12 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     private String vid_url = null;
     private String thumbNl_url = null;
     private Uri dscrptUrl = null;
-    private View mImageButtonVew;
+    private ImageButton mImageButtonVew;
 
     JSONArray ingredientsJSONArray = null;
+
+    Cursor cursor = null;
+
     public RecipeStepsFragment() {
         // Required empty public constructor
     }
@@ -96,7 +112,11 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
             }
         }
 
-
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String favBakery = sharedPreferences.getString(FAVORITE_INGREDIENT_NAME, "");
+        if (recipe_name != null && favBakery.equals(recipe_name)) {
+            mImageButtonVew.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_wite_24dp, null));
+        }
         /**
          * source: https://stackoverflow.com/a/38189630/7504259
          *  date:   Jul 4, 2016
@@ -126,49 +146,60 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
         }
 
-
         mImageButtonVew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ingredientsJSONArray==null) return;
+                if (ingredientsJSONArray == null) return;
                 int arrayLength = ingredientsJSONArray.length();
 
-                Cursor cursor = getActivity().getContentResolver().query(BakeryProvider.Bakery.BAKERY,
-                        null, null,null, null);
 
                 int deletedRows = -1;
-                if(cursor!=null){
 
-                    deletedRows = getActivity().getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
 
-                    Log.d(TAG, "deleted rows: "+deletedRows);
-                }
+                deletedRows = getActivity().getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
 
-                for(int i =0; i < arrayLength; i++){
+                Log.d(TAG, "deleted rows: " + deletedRows);
+
+                boolean success = false;
+                for (int i = 0; i < arrayLength; i++) {
 
                     try {
                         JSONObject jsonObject = ingredientsJSONArray.getJSONObject(i);
 
                         String ingredient_name = jsonObject.getString(IngredientsListAdaptor.INGREDIENTS);
-                        String ingredient_amount = jsonObject.getString(IngredientsListAdaptor.MEASURING);
-                        String ingredient_unit = jsonObject.getString(IngredientsListAdaptor.QUANTITY);
-
+                        String ingredient_amount = jsonObject.getString(IngredientsListAdaptor.QUANTITY);
+                        String ingredient_unit = jsonObject.getString(IngredientsListAdaptor.MEASURING);
 
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(BakeryContract.ITEM, recipe_name);
-                        contentValues.put(BakeryContract._ID, ""+(i+1));
                         contentValues.put(BakeryContract.INGREDIENT, ingredient_name);
                         contentValues.put(BakeryContract.QUANTITY, ingredient_amount);
                         contentValues.put(BakeryContract.UNIT, ingredient_unit);
 
                         getActivity().getContentResolver().insert(BakeryProvider.Bakery.BAKERY, contentValues);
-
+                        success = true;
                     } catch (JSONException e) {
+                        success = false;
                         e.printStackTrace();
+
                     }
                 }
+                if (success) {
+                    /** Source: https://stackoverflow.com/a/29146895/7504259
+                     *  Date:   Mar 19 2015
+                     *  Name:   araks
+                     *  */
+                    mImageButtonVew.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_wite_24dp, null));
+                    SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove(FAVORITE_INGREDIENT_NAME);
+                    editor.putString(RecipeStepsFragment.FAVORITE_INGREDIENT_NAME, recipe_name);
+                    editor.apply();
+                    BakeryWidgetService.startActionUpdatePlantWidgets(getContext());
+                }
+
 //                Toast.makeText(getContext(), "ingredients: "+ingredientsJSONArray, Toast.LENGTH_SHORT).show();
-//                Log.d(TAG, "added rows: "+ingredientsJSONArray.length());
+                Log.d(TAG, "added rows: " + ingredientsJSONArray.length());
             }
         });
 
@@ -240,5 +271,14 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
             RecipeStepsActivity.showSelectedItem(dscrptUrl, selectedItemDescription);
         }
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
+        }
     }
 }

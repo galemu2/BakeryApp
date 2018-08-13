@@ -39,7 +39,8 @@
                 android:value=".ui.RecipeStepsActivity" />
         </activity>
 
-        <receiver android:name=".widget.BakerAppWidgetProvider">
+        <!--widget-->
+        <receiver android:name=".widget.BakeryWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -49,10 +50,17 @@
                 android:resource="@xml/baker_app_widget_info" />
         </receiver>
 
+        <!--database-->
         <provider
             android:name=".database.generated.BakeryProvider"
             android:authorities="com.udacity.bakingapp.database.provider"
-            android:exported="false" />
+            android:exported="true" />
+
+        <service android:name=".widget.BakeryWidgetService" />
+
+        <service
+            android:name=".widget.GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import static net.simonvt.schematic.annotation.DataType.Type.TEXT;
 public interface BakeryContract {
 
     @DataType(INTEGER) @PrimaryKey
+    @AutoIncrement
     String _ID = "_id";
 
     @DataType(TEXT) @NotNull

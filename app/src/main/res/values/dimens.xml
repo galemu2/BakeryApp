@@ -22,4 +22,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="image_button_padding">8dp</dimen>
+    <dimen name="widget_grid_padding">15dp</dimen>
+    <dimen name="scrolling_image_button_height">50dp</dimen>
+    <dimen name="widget_grid_title_padding">8dp</dimen>
+    <dimen name="widget_text_padding">8dp</dimen>
 </resources>
