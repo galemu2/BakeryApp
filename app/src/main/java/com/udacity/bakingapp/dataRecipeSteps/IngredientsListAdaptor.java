@@ -17,13 +17,12 @@ import org.json.JSONObject;
 
 public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsListAdaptor.ViewHolder> {
 
-    public static final String BULLET = "";//"►  ";
     private static final String TAG = IngredientsListAdaptor.class.getSimpleName();
     private Context mContext;
     private JSONArray jsonArray;
-    private static final String QUANTITY = "quantity";
-    private static final String MEASURING = "measure";
-    private static final String INGREDIENTS = "ingredient";
+    public static final String QUANTITY = "quantity";
+    public static final String MEASURING = "measure";
+    public static final String INGREDIENTS = "ingredient";
 
 
     /*      "quantity":2,
@@ -60,7 +59,7 @@ public class IngredientsListAdaptor extends RecyclerView.Adapter<IngredientsList
             jsonObject = jsonArray.getJSONObject(position);
             ingredient = jsonObject.getString(QUANTITY);
             ingredient = ingredient + " " + jsonObject.getString(MEASURING);
-            ingredient = BULLET + ingredient + " , " + jsonObject.getString(INGREDIENTS); //"• "
+            ingredient =   ingredient + " , " + jsonObject.getString(INGREDIENTS); //"• "
         } catch (JSONException e) {
             e.printStackTrace();
         }

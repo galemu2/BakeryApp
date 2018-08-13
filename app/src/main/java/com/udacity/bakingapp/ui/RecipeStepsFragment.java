@@ -1,8 +1,10 @@
 package com.udacity.bakingapp.ui;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,15 +15,19 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.dataRecipeSteps.IngredientsListAdaptor;
 import com.udacity.bakingapp.dataRecipeSteps.SelectedIngredientStep;
 import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
+import com.udacity.bakingapp.database.BakeryContract;
+import com.udacity.bakingapp.database.BakeryProvider;
 import com.udacity.bakingapp.utility.UtilClass;
 
 import org.json.JSONArray;
@@ -30,6 +36,7 @@ import org.json.JSONObject;
 
 public class RecipeStepsFragment extends Fragment implements SelectedIngredientStep {
 
+    private static final String TAG = RecipeStepsFragment.class.getSimpleName();
     private Toolbar mToolbar;
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
 
@@ -59,19 +66,24 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     private String vid_url = null;
     private String thumbNl_url = null;
     private Uri dscrptUrl = null;
+    private View mImageButtonVew;
 
+    JSONArray ingredientsJSONArray = null;
     public RecipeStepsFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         mToolbar = rootView.findViewById(R.id.toolBar);
+
+        mImageButtonVew = rootView.findViewById(R.id.image_button);
+        mImageButtonVew.setVisibility(View.VISIBLE);
 
         Intent intent = getAppCompatActivity(rootView).getIntent();
         if (intent != null) {
@@ -98,7 +110,7 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
         ingredientRecyclerView = rootView.findViewById(R.id.recyclerView_ingredients);
         ingredientsLayoutManager = new GridLayoutManager(getContext(), 2);
-        JSONArray ingredientsJSONArray = null;
+
 
         try {
             ingredientsJSONArray = jsonObject.getJSONArray(INGREDIENTS);
@@ -114,9 +126,54 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
         }
 
+
+        mImageButtonVew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ingredientsJSONArray==null) return;
+                int arrayLength = ingredientsJSONArray.length();
+
+                Cursor cursor = getActivity().getContentResolver().query(BakeryProvider.Bakery.BAKERY,
+                        null, null,null, null);
+
+                int deletedRows = -1;
+                if(cursor!=null){
+
+                    deletedRows = getActivity().getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
+
+                    Log.d(TAG, "deleted rows: "+deletedRows);
+                }
+
+                for(int i =0; i < arrayLength; i++){
+
+                    try {
+                        JSONObject jsonObject = ingredientsJSONArray.getJSONObject(i);
+
+                        String ingredient_name = jsonObject.getString(IngredientsListAdaptor.INGREDIENTS);
+                        String ingredient_amount = jsonObject.getString(IngredientsListAdaptor.MEASURING);
+                        String ingredient_unit = jsonObject.getString(IngredientsListAdaptor.QUANTITY);
+
+
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(BakeryContract.ITEM, recipe_name);
+                        contentValues.put(BakeryContract._ID, ""+(i+1));
+                        contentValues.put(BakeryContract.INGREDIENT, ingredient_name);
+                        contentValues.put(BakeryContract.QUANTITY, ingredient_amount);
+                        contentValues.put(BakeryContract.UNIT, ingredient_unit);
+
+                        getActivity().getContentResolver().insert(BakeryProvider.Bakery.BAKERY, contentValues);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+//                Toast.makeText(getContext(), "ingredients: "+ingredientsJSONArray, Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "added rows: "+ingredientsJSONArray.length());
+            }
+        });
+
         stepsRecyclerView = rootView.findViewById(R.id.recyclerView_steps);
         stepsLayoutManager = new LinearLayoutManager(getContext());
-
 
         try {
             stepsJSONArray = jsonObject.getJSONArray(STEPS);
@@ -146,7 +203,6 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(getActivity());
         }
-
 
         return super.onOptionsItemSelected(item);
     }

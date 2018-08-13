@@ -48,6 +48,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baker_app_widget_info" />
         </receiver>
+
+        <provider
+            android:name=".database.generated.BakeryProvider"
+            android:authorities="com.udacity.bakingapp.database.provider"
+            android:exported="false" />
     </application>
 
 </manifest>
