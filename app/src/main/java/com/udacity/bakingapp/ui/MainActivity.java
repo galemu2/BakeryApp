@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<JSONArray> loader, JSONArray data) {
 
-        Log.d(TAG, "jsonArrray Size: "+data.length());
         mAdaptor.setData(data);
     }
 

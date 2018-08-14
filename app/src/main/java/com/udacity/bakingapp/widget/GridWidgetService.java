@@ -82,8 +82,11 @@ class GridRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         bakingIngredient = "> "+quantity + " " + unit + ", " + ingredient;
 
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_baker_list_item);
-        views.setTextViewText(R.id.widget_single_item_textView, bakingIngredient);
-       // views.setImageViewResource(R.id.widget_grid_view, R.drawable.donuts);
+        views.setTextViewText(R.id.widget_single_item_textView_in_grid, bakingIngredient);
+
+        Intent intent  = new Intent();
+        views.setOnClickFillInIntent(R.id.widget_single_item_textView_in_grid, intent);
+
 
         return views;
     }

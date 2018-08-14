@@ -7,11 +7,11 @@
     android:padding="@dimen/widget_margin">
 
     <TextView
-        android:id="@+id/widget_single_item_textView"
+        android:id="@+id/widget_single_item_textView_in_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/black"
-
+        android:text="@string/select_fav_ingredient"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         android:textColor="@android:color/white"
         android:paddingStart="@dimen/widget_text_padding"

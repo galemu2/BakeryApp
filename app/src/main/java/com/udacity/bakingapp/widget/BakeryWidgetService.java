@@ -20,7 +20,8 @@ public class BakeryWidgetService extends IntentService {
     private static final String ACTION_UPDATE_BAKERY_WIDGETS = "com.udacity.bakingapp.widget.action.update_bakery_widgets";
 
     ArrayList<String> bakingIngredient = new ArrayList<>();
-    String item = "";
+    String item = null;
+
 
     public BakeryWidgetService() {
         super(TAG);
@@ -56,10 +57,6 @@ public class BakeryWidgetService extends IntentService {
 
             item = cursor.getString(itemIndex);
 
-//            ArrayList<String>  ingredient = new ArrayList<>();
-//            ArrayList<String> quantity = new ArrayList<>();
-//            ArrayList<String> unit = new ArrayList<>();
-
             while (cursor.moveToNext()) {
                 String ingredient = cursor.getString(ingredientIndex);
 
@@ -84,4 +81,6 @@ public class BakeryWidgetService extends IntentService {
         intent.setAction(BakeryWidgetService.ACTION_UPDATE_BAKERY_WIDGETS);
         context.startService(intent);
     }
+
+
 }

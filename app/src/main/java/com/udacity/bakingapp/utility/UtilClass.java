@@ -6,9 +6,19 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
+import com.udacity.bakingapp.ui.MainActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
+
+import static com.udacity.bakingapp.ui.MainActivity.URL_BASE;
+
 public class UtilClass {
 
 
+    private static JSONArray bakingArray;
     private static final String MP4 = ".mp4";
     private static final String TAG = UtilClass.class.getSimpleName();
 
@@ -43,4 +53,17 @@ public class UtilClass {
 
     }
 
+    public static  JSONArray getInitialJsonArray() {
+        try {
+
+            try {
+                bakingArray = new JSONArray(MainActivity.runner(URL_BASE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bakingArray;
+    }
 }

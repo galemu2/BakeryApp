@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -30,8 +29,8 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
 
         RemoteViews rv;
 
-        if(height < 100){
-            rv =getSingleItemRemoteView(context, item);
+        if (height < 100) {
+            rv = getSingleItemRemoteView(context, item);
         } else {
             rv = getIngredientGridRemoteView(context, item);
         }
@@ -43,20 +42,34 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews getIngredientGridRemoteView(Context context, String item) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
-        views.setTextViewText(R.id.textView_widget_grid_title, item);
+
+        if (item != null && item.length() > 0) {
+            views.setTextViewText(R.id.textView_widget_grid_title, item);
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent= PendingIntent.getActivity(context, 0, intent, 0);
+            views.setPendingIntentTemplate(R.id.widget_grid_view, pendingIntent);
+
+        }
         Intent intent = new Intent(context, GridWidgetService.class);
         views.setRemoteAdapter(R.id.widget_grid_view, intent);
 
+        Intent mainIntent  = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
+        views.setPendingIntentTemplate(R.id.widget_grid_view, pendingIntent);
+
         views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);
+
         return views;
     }
 
     private static RemoteViews getSingleItemRemoteView(Context context, String item) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_baker);
-        views.setTextViewText(R.id.widget_single_item_textView, item);
+        if (item != null && item.length() > 0) {
+            views.setTextViewText(R.id.widget_single_item_textView, item);
+        }
         Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 , intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         views.setOnClickPendingIntent(R.id.widget_single_item_textView, pendingIntent);
         return views;
@@ -79,12 +92,12 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    public static void  updateBakeryWidgets(Context context, AppWidgetManager appWidgetManager,
-                                            int[] appWidgetIds, String item, ArrayList<String> bakingIngredient){
+    public static void updateBakeryWidgets(Context context, AppWidgetManager appWidgetManager,
+                                           int[] appWidgetIds, String item, ArrayList<String> bakingIngredient) {
 
-        for (int appWidgetId: appWidgetIds){
+        for (int appWidgetId : appWidgetIds) {
 
-            updateAppWidget(context,    appWidgetManager, appWidgetId, item, bakingIngredient);
+            updateAppWidget(context, appWidgetManager, appWidgetId, item, bakingIngredient);
         }
     }
 
@@ -93,8 +106,8 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-        Log.d(TAG, "height: "+height);
-        Log.d(TAG, "width: "+width);
+        Log.d(TAG, "height: " + height);
+        Log.d(TAG, "width: " + width);
         BakeryWidgetService.startActionUpdatePlantWidgets(context);
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }

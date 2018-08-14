@@ -45,10 +45,10 @@ public class RecipeStepsActivity extends AppCompatActivity {
             if (intent != null) {
                 jsonObjString = intent.getStringExtra(JSON_OBJ_BAKERY);
                 try {
-                    Log.d(TAG, "JsonObj is not null: " + jsonObjString.length());
+
                     jsonObject = new JSONObject(jsonObjString);
                     recipe_name = jsonObject.getString(RECIPE_NAME);
-                    Log.d(TAG, "recipe Name: " + recipe_name);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

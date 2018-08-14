@@ -56,9 +56,9 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     private String jsonObjString;
     private JSONObject jsonObject;
 
-    private static final String INGREDIENTS = "ingredients";
+    public static final String INGREDIENTS = "ingredients";
     private static final String STEPS = "steps";
-    private static final String RECIPE_NAME = "name";
+    public static final String RECIPE_NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String VID_URL = "videoURL";
     private static final String THUMBNAIL_URL = "thumbnailURL";
