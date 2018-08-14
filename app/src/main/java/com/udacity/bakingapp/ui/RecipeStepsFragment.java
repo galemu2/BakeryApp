@@ -6,16 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.dataRecipeSteps.IngredientsListAdaptor;
@@ -37,10 +31,7 @@ import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
 import com.udacity.bakingapp.database.BakeryContract;
 import com.udacity.bakingapp.database.BakeryProvider;
 import com.udacity.bakingapp.utility.UtilClass;
-import com.udacity.bakingapp.widget.BakeryWidgetProvider;
 import com.udacity.bakingapp.widget.BakeryWidgetService;
-
-import net.simonvt.schematic.annotation.TableEndpoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,11 +141,9 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
             @Override
             public void onClick(View v) {
                 if (ingredientsJSONArray == null) return;
+
                 int arrayLength = ingredientsJSONArray.length();
-
-
                 int deletedRows = -1;
-
 
                 deletedRows = getActivity().getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
 

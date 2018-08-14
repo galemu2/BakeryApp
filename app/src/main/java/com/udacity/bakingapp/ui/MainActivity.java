@@ -13,15 +13,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.udacity.bakingapp.utility.UtilClass;
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.dataMainActivity.BakeryItemClicked;
 import com.udacity.bakingapp.dataMainActivity.CustomBakingLoader;
 import com.udacity.bakingapp.dataMainActivity.RecipeListAdaptor;
+import com.udacity.bakingapp.utility.UtilClass;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

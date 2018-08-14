@@ -22,7 +22,7 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
     private static final String TAG = BakeryWidgetProvider.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String item, ArrayList<String> bakingIngredient) {
+                                int appWidgetId, String item ) {
 
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
@@ -72,6 +72,7 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         views.setOnClickPendingIntent(R.id.widget_single_item_textView, pendingIntent);
+         
         return views;
     }
 
@@ -93,11 +94,11 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
     }
 
     public static void updateBakeryWidgets(Context context, AppWidgetManager appWidgetManager,
-                                           int[] appWidgetIds, String item, ArrayList<String> bakingIngredient) {
+                                           int[] appWidgetIds, String item ) {
 
         for (int appWidgetId : appWidgetIds) {
 
-            updateAppWidget(context, appWidgetManager, appWidgetId, item, bakingIngredient);
+            updateAppWidget(context, appWidgetManager, appWidgetId, item );
         }
     }
 

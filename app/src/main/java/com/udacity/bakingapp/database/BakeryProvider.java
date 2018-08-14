@@ -6,8 +6,9 @@ import android.net.Uri;
 import net.simonvt.schematic.annotation.ContentProvider;
 import net.simonvt.schematic.annotation.ContentUri;
 import net.simonvt.schematic.annotation.TableEndpoint;
-/*,
-        packageName = "com.udacity.bakingapp.database.provider"*/
+
+
+/*packageName = "com.udacity.bakingapp.database.provider"*/
 @ContentProvider(authority = BakeryProvider.AUTHORITY, database = BakeryDatabase.class)
 public class BakeryProvider {
 

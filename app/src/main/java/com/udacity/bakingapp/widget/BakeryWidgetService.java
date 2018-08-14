@@ -51,28 +51,16 @@ public class BakeryWidgetService extends IntentService {
             bakingIngredient.clear();
 
             int itemIndex = cursor.getColumnIndex(BakeryContract.ITEM);
-            int ingredientIndex = cursor.getColumnIndex(BakeryContract.INGREDIENT);
-            int quantityIndex = cursor.getColumnIndex(BakeryContract.QUANTITY);
-            int unitIndex = cursor.getColumnIndex(BakeryContract.UNIT);
+
 
             item = cursor.getString(itemIndex);
 
-            while (cursor.moveToNext()) {
-                String ingredient = cursor.getString(ingredientIndex);
 
-                String quantity = cursor.getString(quantityIndex);
-
-                String unit = cursor.getString(unitIndex);
-
-                String s = quantity + " " + unit + ", " + ingredient;
-                bakingIngredient.add(s);
-
-            }
         }
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakeryWidgetProvider.class));
-        BakeryWidgetProvider.updateBakeryWidgets(this, appWidgetManager, appWidgetIds, item, bakingIngredient);
+        BakeryWidgetProvider.updateBakeryWidgets(this, appWidgetManager, appWidgetIds, item);
     }
 
 
