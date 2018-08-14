@@ -72,7 +72,7 @@ public class BakeryWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         views.setOnClickPendingIntent(R.id.widget_single_item_textView, pendingIntent);
-         
+
         return views;
     }
 

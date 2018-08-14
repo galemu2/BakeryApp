@@ -17,9 +17,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.dataMainActivity.BakeryItemClicked;
-import com.udacity.bakingapp.dataMainActivity.CustomBakingLoader;
-import com.udacity.bakingapp.dataMainActivity.RecipeListAdaptor;
+import com.udacity.bakingapp.MainActivityAdaptor.BakeryItemClicked;
+import com.udacity.bakingapp.MainActivityAdaptor.CustomBakingLoader;
+import com.udacity.bakingapp.MainActivityAdaptor.RecipeListAdaptor;
 import com.udacity.bakingapp.utility.UtilClass;
 
 import org.json.JSONArray;

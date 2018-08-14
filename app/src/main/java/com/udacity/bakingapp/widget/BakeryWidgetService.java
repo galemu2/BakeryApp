@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -28,14 +29,22 @@ public class BakeryWidgetService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            Log.d(TAG, "Action: " + action);
-            if (action.equals(ACTION_UPDATE_BAKERY_WIDGETS)) {
-                handleActionUpdateBakeryWidgets();
+    protected void onHandleIntent(@Nullable final Intent intent) {
+        new AsyncTask () {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                if (intent != null) {
+                    final String action = intent.getAction();
+                    Log.d(TAG, "Action: " + action);
+                    if (action.equals(ACTION_UPDATE_BAKERY_WIDGETS)) {
+                        handleActionUpdateBakeryWidgets();
+                    }
+                }
+
+                return null;
             }
-        }
+        }.execute();
+
     }
 
     private void handleActionUpdateBakeryWidgets() {

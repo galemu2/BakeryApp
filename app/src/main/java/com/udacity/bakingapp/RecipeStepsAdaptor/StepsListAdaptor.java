@@ -1,4 +1,4 @@
-package com.udacity.bakingapp.dataRecipeSteps;
+package com.udacity.bakingapp.RecipeStepsAdaptor;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,11 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.ViewHolder>{
+public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.ViewHolder> {
 
 
     public static final String ADD_SPACING = ". ";
-    public static final String PREP_STEP =  0 +ADD_SPACING;
+    public static final String PREP_STEP = 0 + ADD_SPACING;
 
     private Context mContext;
     private JSONArray mJSONArray;
@@ -41,7 +41,7 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     @Override
     public StepsListAdaptor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.steps_item_card, parent, false);
-        StepsListAdaptor.ViewHolder  viewHolder = new StepsListAdaptor.ViewHolder(view);
+        StepsListAdaptor.ViewHolder viewHolder = new StepsListAdaptor.ViewHolder(view);
 
         return viewHolder;
     }
@@ -60,19 +60,19 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
         String steps_long = null;
         try {
             jsonObject = mJSONArray.getJSONObject(position);
-            steps = jsonObject.getString(STEPS_ID)+ ADD_SPACING;
+            steps = jsonObject.getString(STEPS_ID) + ADD_SPACING;
             steps_long = jsonObject.getString(DESCRIPTION);
-            if(steps.equals(PREP_STEP)){
+            if (steps.equals(PREP_STEP)) {
                 steps = "";
             }
-            steps = steps  +jsonObject.getString(SHORT_DESCRIPTION);
+            steps = steps + jsonObject.getString(SHORT_DESCRIPTION);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(steps!=null)  holder.textView_steps.setText(steps);
+        if (steps != null) holder.textView_steps.setText(steps);
 
-        if(position!=0 && steps_long!=null){
+        if (position != 0 && steps_long != null) {
             holder.textView_steps_long.setVisibility(View.VISIBLE);
             holder.textView_steps_long.setText(steps_long);
         } else {
@@ -80,10 +80,10 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
             holder.textView_steps_long.setVisibility(View.INVISIBLE);
         }
 
-        holder.imageButton_steps_clip.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSelectedIngredientStep.onItemSelected(mContext  , position);
+                mSelectedIngredientStep.onItemSelected(mContext, position);
 
             }
         });
@@ -91,7 +91,7 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
 
     @Override
     public int getItemCount() {
-        if(mJSONArray!=null)
+        if (mJSONArray != null)
             return mJSONArray.length();
         return 0;
     }
@@ -99,15 +99,11 @@ public class StepsListAdaptor extends RecyclerView.Adapter<StepsListAdaptor.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View view;
         private TextView textView_steps, textView_steps_long;
-        private ImageButton imageButton_steps_clip;
-
-
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
             textView_steps = itemView.findViewById(R.id.textView_steps_short);
-            imageButton_steps_clip = itemView.findViewById(R.id.imageButton_steps_clip);
             textView_steps_long = itemView.findViewById(R.id.textView_steps_long);
         }
     }

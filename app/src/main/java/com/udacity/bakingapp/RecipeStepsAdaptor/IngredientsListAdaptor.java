@@ -1,4 +1,4 @@
-package com.udacity.bakingapp.dataRecipeSteps;
+package com.udacity.bakingapp.RecipeStepsAdaptor;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

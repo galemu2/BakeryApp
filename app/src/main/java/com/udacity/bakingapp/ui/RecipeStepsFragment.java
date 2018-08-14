@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.dataRecipeSteps.IngredientsListAdaptor;
-import com.udacity.bakingapp.dataRecipeSteps.SelectedIngredientStep;
-import com.udacity.bakingapp.dataRecipeSteps.StepsListAdaptor;
+import com.udacity.bakingapp.RecipeStepsAdaptor.IngredientsListAdaptor;
+import com.udacity.bakingapp.RecipeStepsAdaptor.SelectedIngredientStep;
+import com.udacity.bakingapp.RecipeStepsAdaptor.StepsListAdaptor;
 import com.udacity.bakingapp.database.BakeryContract;
 import com.udacity.bakingapp.database.BakeryProvider;
 import com.udacity.bakingapp.utility.UtilClass;

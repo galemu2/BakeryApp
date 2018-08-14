@@ -9,7 +9,7 @@
     <string name="steps_title">Steps</string>
     <string name="bullet">►</string>
     <string name="hint_steps_short">step one</string>
-    <string name="hint_steps_long">this is the long version of the stps.  it may contain multiple lines</string>
+    <string name="hint_steps_long">this is the long version of the steps.  it may contain multiple lines</string>
 
 
     <string name="selected_fav">Add favorite item</string>

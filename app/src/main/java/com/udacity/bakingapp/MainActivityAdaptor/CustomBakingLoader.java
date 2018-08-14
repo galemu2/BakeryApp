@@ -1,4 +1,4 @@
-package com.udacity.bakingapp.dataMainActivity;
+package com.udacity.bakingapp.MainActivityAdaptor;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.udacity.bakingapp.dataMainActivity;
+package com.udacity.bakingapp.MainActivityAdaptor;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,7 +19,7 @@ public class RecipeListAdaptor extends RecyclerView.Adapter<RecipeListAdaptor.Vi
     public static final String SERVING_SIZE1 = "Serving size: ";
     private Context mContext;
     private static JSONArray bakingArray;
-    private static final String RECIPE_NAME = "name";
+    public static final String RECIPE_NAME = "name";
     private static final String SERVING_SIZE = "servings";
     private BakeryItemClicked bakeryItemClicked;
 
