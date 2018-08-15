@@ -40,7 +40,7 @@ import org.json.JSONObject;
 public class RecipeStepsFragment extends Fragment implements SelectedIngredientStep {
 
     private static final String TAG = RecipeStepsFragment.class.getSimpleName();
-    private static final String FAVORITE_INGREDIENT_NAME = "the name of the ingredient saved";
+    protected static final String FAVORITE_INGREDIENT_NAME = "the name of the ingredient saved";
     private Toolbar mToolbar;
     public static final String JSON_OBJ_BAKERY = "get-the-bakery-item-json-object";
 
@@ -70,9 +70,9 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
     private String vid_url = null;
     private String thumbNl_url = null;
     private Uri dscrptUrl = null;
-    private ImageButton mImageButtonVew;
+    private static ImageButton mImageButtonVew;
 
-    JSONArray ingredientsJSONArray = null;
+    private static JSONArray ingredientsJSONArray = null;
 
     Cursor cursor = null;
 
@@ -80,6 +80,15 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (RecipeStepsActivity.mTwoPain) {
+            if (mToolbar != null) {
+                mToolbar.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -88,9 +97,12 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         mToolbar = rootView.findViewById(R.id.toolBar);
+        if (!RecipeStepsActivity.mTwoPain) {
 
-        mImageButtonVew = rootView.findViewById(R.id.image_button);
-        mImageButtonVew.setVisibility(View.VISIBLE);
+            mImageButtonVew = rootView.findViewById(R.id.image_button);
+            mImageButtonVew.setVisibility(View.VISIBLE);
+        }
+
 
         Intent intent = getAppCompatActivity(rootView).getIntent();
         if (intent != null) {
@@ -105,8 +117,10 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         String favBakery = sharedPreferences.getString(FAVORITE_INGREDIENT_NAME, "");
-        if (recipe_name != null && favBakery.equals(recipe_name)) {
-            mImageButtonVew.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_wite_24dp, null));
+        if (!RecipeStepsActivity.mTwoPain) {
+            if (recipe_name != null && favBakery.equals(recipe_name)) {
+                mImageButtonVew.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_wite_24dp, null));
+            }
         }
         /**
          * source: https://stackoverflow.com/a/38189630/7504259
@@ -137,7 +151,30 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
 
         }
 
-        mImageButtonVew.setOnClickListener(new View.OnClickListener() {
+        if (!RecipeStepsActivity.mTwoPain) {
+            selectFavIngredient(mImageButtonVew, getContext(), recipe_name);
+        }
+        stepsRecyclerView = rootView.findViewById(R.id.recyclerView_steps);
+        stepsLayoutManager = new LinearLayoutManager(getContext());
+
+        try {
+            stepsJSONArray = jsonObject.getJSONArray(STEPS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (ingredientsJSONArray != null) {
+            stepsListAdaptor = new StepsListAdaptor(getContext(), stepsJSONArray, this);
+            stepsRecyclerView.setLayoutManager(stepsLayoutManager);
+            stepsRecyclerView.setAdapter(stepsListAdaptor);
+
+        }
+
+        return rootView;
+    }
+
+    public static void selectFavIngredient(final ImageButton imageButton, final Context context, final String recipe_name) {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ingredientsJSONArray == null) return;
@@ -145,7 +182,7 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
                 int arrayLength = ingredientsJSONArray.length();
                 int deletedRows = -1;
 
-                deletedRows = getActivity().getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
+                deletedRows = context.getContentResolver().delete(BakeryProvider.Bakery.BAKERY, null, null);
 
                 Log.d(TAG, "deleted rows: " + deletedRows);
 
@@ -165,7 +202,7 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
                         contentValues.put(BakeryContract.QUANTITY, ingredient_amount);
                         contentValues.put(BakeryContract.UNIT, ingredient_unit);
 
-                        getActivity().getContentResolver().insert(BakeryProvider.Bakery.BAKERY, contentValues);
+                        context.getContentResolver().insert(BakeryProvider.Bakery.BAKERY, contentValues);
                         success = true;
                     } catch (JSONException e) {
                         success = false;
@@ -178,37 +215,19 @@ public class RecipeStepsFragment extends Fragment implements SelectedIngredientS
                      *  Date:   Mar 19 2015
                      *  Name:   araks
                      *  */
-                    mImageButtonVew.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_star_wite_24dp, null));
-                    SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    imageButton.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_star_wite_24dp, null));
+                    SharedPreferences sharedPreferences = ((AppCompatActivity) context).getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.remove(FAVORITE_INGREDIENT_NAME);
                     editor.putString(RecipeStepsFragment.FAVORITE_INGREDIENT_NAME, recipe_name);
                     editor.apply();
-                    BakeryWidgetService.startActionUpdatePlantWidgets(getContext());
+                    BakeryWidgetService.startActionUpdatePlantWidgets(context);
                 }
 
 //                Toast.makeText(getContext(), "ingredients: "+ingredientsJSONArray, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "added rows: " + ingredientsJSONArray.length());
             }
         });
-
-        stepsRecyclerView = rootView.findViewById(R.id.recyclerView_steps);
-        stepsLayoutManager = new LinearLayoutManager(getContext());
-
-        try {
-            stepsJSONArray = jsonObject.getJSONArray(STEPS);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (ingredientsJSONArray != null) {
-            stepsListAdaptor = new StepsListAdaptor(getContext(), stepsJSONArray, this);
-            stepsRecyclerView.setLayoutManager(stepsLayoutManager);
-            stepsRecyclerView.setAdapter(stepsListAdaptor);
-
-        }
-
-        return rootView;
     }
 
     private static AppCompatActivity getAppCompatActivity(View view) {
