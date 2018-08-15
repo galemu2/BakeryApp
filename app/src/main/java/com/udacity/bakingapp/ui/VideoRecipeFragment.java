@@ -145,8 +145,20 @@ public class VideoRecipeFragment extends Fragment  {
     public void onStart() {
         super.onStart();
 
-        if(UtilClass.getNetworkStatus(getContext()) ) initializePlayer(testUri);
-        else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
+        if (Util.SDK_INT > 23) {
+            if(UtilClass.getNetworkStatus(getContext()) ) initializePlayer(testUri);
+            else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23) {
+            if (UtilClass.getNetworkStatus(getContext())) initializePlayer(testUri);
+            else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initializePlayer(Uri videoUri) {
@@ -203,10 +215,23 @@ public class VideoRecipeFragment extends Fragment  {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
 
-        if (mSimplePlayer != null) releasePlayer();
+        if (Util.SDK_INT <= 23) {
+            if (mSimplePlayer != null) releasePlayer();
+        }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (Util.SDK_INT > 23) {
+            if (mSimplePlayer != null) releasePlayer();
+        }
+    }
+
+
 
 }
