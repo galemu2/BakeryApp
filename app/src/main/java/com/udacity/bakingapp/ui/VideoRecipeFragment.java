@@ -37,7 +37,7 @@ import org.json.JSONObject;
 import static com.udacity.bakingapp.utility.UtilClass.getVidUri;
 
 
-public class VideoRecipeFragment extends Fragment  {
+public class VideoRecipeFragment extends Fragment {
 
     private static final String TAG = VideoRecipeFragment.class.getSimpleName();
 
@@ -49,6 +49,7 @@ public class VideoRecipeFragment extends Fragment  {
     public static final String PASSED_DESCRIPTION_MULTI_PAIN_VIEW = "long description in multi pain view";
     public static final String PASSED_VIDEO_URL_MULTI_PAIN_VIEW = "string value for url in multi pain view";
     public static final String CHECK_NETWORK_STATUS = "Check network status";
+    private static final String EXO_PLAYER_POSITION = "save the media player position";
 
     private SimpleExoPlayerView simpleExoPlayerView;
     public SimpleExoPlayer mSimplePlayer;
@@ -65,8 +66,19 @@ public class VideoRecipeFragment extends Fragment  {
     private JSONObject videoJSONObj;
     Uri testUri = null;
     MediaSource videoSource = null;
+    private long playerPositionSaved = -1;
 
     public VideoRecipeFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            playerPositionSaved = savedInstanceState.getLong(EXO_PLAYER_POSITION, -1);
+        } else {
+            playerPositionSaved = -1;
+        }
     }
 
     @Nullable
@@ -84,7 +96,7 @@ public class VideoRecipeFragment extends Fragment  {
 
         Bundle bundle = getArguments();
 
-        if(!RecipeStepsActivity.mTwoPain) {
+        if (!RecipeStepsActivity.mTwoPain) {
 
 
             if (bundle != null) {
@@ -111,7 +123,7 @@ public class VideoRecipeFragment extends Fragment  {
              *  Date:   May 9 2010
              Name:   hackbod*/
             int currentOrientation = getResources().getConfiguration().orientation;
-            if(currentOrientation== Configuration.ORIENTATION_PORTRAIT) {
+            if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
 
 
                 textView_video_detail.clearComposingText();
@@ -119,9 +131,9 @@ public class VideoRecipeFragment extends Fragment  {
             }
         } else {
 
-            if(bundle!=null){
+            if (bundle != null) {
                 String videoUrl = bundle.getString(PASSED_VIDEO_URL_MULTI_PAIN_VIEW);
-                if(videoUrl!=null  ){
+                if (videoUrl != null) {
                     testUri = Uri.parse(videoUrl);
 
                 }
@@ -133,12 +145,8 @@ public class VideoRecipeFragment extends Fragment  {
         }
 
 
-
-
-
         return rootView;
     }
-
 
 
     @Override
@@ -146,11 +154,12 @@ public class VideoRecipeFragment extends Fragment  {
         super.onStart();
 
         if (Util.SDK_INT > 23) {
-            if(UtilClass.getNetworkStatus(getContext()) ) initializePlayer(testUri);
+            if (UtilClass.getNetworkStatus(getContext())) initializePlayer(testUri);
             else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
         }
 
     }
+
 
     @Override
     public void onResume() {
@@ -186,6 +195,12 @@ public class VideoRecipeFragment extends Fragment  {
             mSimplePlayer.prepare(videoSource);
             mSimplePlayer.setPlayWhenReady(true);
 
+            if (playerPositionSaved != -1) {
+                if (mSimplePlayer.getPlayWhenReady()) {
+                    mSimplePlayer.seekTo(playerPositionSaved);
+                }
+            }
+
 
         } else {
 
@@ -196,11 +211,11 @@ public class VideoRecipeFragment extends Fragment  {
                 releasePlayer();
             }
 
-            if(UtilClass.getNetworkStatus(getContext())) initializePlayer(testUri);
+            if (UtilClass.getNetworkStatus(getContext())) initializePlayer(testUri);
             else Toast.makeText(getContext(), CHECK_NETWORK_STATUS, Toast.LENGTH_SHORT).show();
         }
 
-        if(videoUri==null){
+        if (videoUri == null) {
             Toast.makeText(getContext(), "No video available", Toast.LENGTH_SHORT).show();
         }
     }
@@ -218,9 +233,14 @@ public class VideoRecipeFragment extends Fragment  {
     public void onPause() {
         super.onPause();
 
-        if (Util.SDK_INT <= 23) {
-            if (mSimplePlayer != null) releasePlayer();
+        if (mSimplePlayer != null) {
+            playerPositionSaved = mSimplePlayer.getCurrentPosition();
+
+            Log.d(TAG, "position: " + playerPositionSaved);
+            if (Util.SDK_INT <= 23)
+                if (mSimplePlayer != null) releasePlayer();
         }
+
     }
 
     @Override
@@ -232,6 +252,9 @@ public class VideoRecipeFragment extends Fragment  {
         }
     }
 
-
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong(EXO_PLAYER_POSITION, playerPositionSaved);
+        super.onSaveInstanceState(outState);
+    }
 }
